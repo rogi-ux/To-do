@@ -1,0 +1,99 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#7566d9">
+  <meta name="description" content="DayFlow — your personal planner and habit tracker.">
+  <title>DayFlow — Personal Planner</title>
+  <link rel="manifest" href="./manifest.webmanifest">
+  <link rel="icon" href="./icon.svg" type="image/svg+xml">
+  <link rel="stylesheet" href="./styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <aside class="sidebar">
+      <a class="brand" href="#" aria-label="DayFlow home"><span class="brand-mark">✦</span><span>dayflow<small>your day, in flow</small></span></a>
+      <nav class="nav-list" aria-label="Main navigation">
+        <button class="nav-item active" data-view="home"><span>⌂</span> Overview</button>
+        <button class="nav-item" data-view="tasks"><span>☷</span> All tasks</button>
+        <button class="nav-item" data-view="habits"><span>▦</span> Habit tracker</button>
+        <button class="nav-item" data-view="calendar"><span>▣</span> Schedule</button>
+        <button class="nav-item" data-view="insights"><span>↗</span> Insights</button>
+        <button class="nav-item" data-view="focus"><span>◷</span> Focus timer</button>
+      </nav>
+      <div class="sidebar-bottom">
+        <div class="local-note"><span class="status-dot"></span><div><strong>Your private space</strong><small>Saved on this device</small></div></div>
+        <button id="themeToggle" class="nav-item"><span>☾</span> Toggle dark mode</button>
+        <button class="nav-item" data-view="settings"><span>⚙</span> Settings & backup</button>
+      </div>
+    </aside>
+    <main class="main">
+      <header class="topbar">
+        <div><div class="eyebrow" id="todayLabel">YOUR DAY</div><h1 id="pageTitle">Good day ✨</h1></div>
+        <div class="top-actions">
+          <button id="notifyButton" class="button button-quiet">Enable reminders</button>
+          <button id="quickAddTop" class="button button-primary"><span>＋</span> Quick add</button>
+          <button class="avatar" aria-label="DayFlow">D</button>
+        </div>
+      </header>
+      <section id="view-home" class="view active">
+        <div class="welcome-card">
+          <div><p class="eyebrow light">A LITTLE PROGRESS ADDS UP</p><h2>Make space for what matters.</h2><p id="welcomeDate">A gentle plan for today.</p></div>
+          <div class="welcome-sparkle">✦</div>
+        </div>
+        <div class="stats-grid" id="homeStats"></div>
+        <div class="content-grid">
+          <section class="panel task-panel">
+            <div class="panel-heading"><div><p class="eyebrow">YOUR SCHEDULE</p><h2>Today's tasks</h2></div><button class="text-button" data-goto="tasks">View all →</button></div>
+            <div id="todayTasks" class="task-list"></div>
+            <button class="add-inline" id="quickAddInline">＋ Add a task</button>
+          </section>
+          <section class="panel habit-panel">
+            <div class="panel-heading"><div><p class="eyebrow">SMALL, STEADY STEPS</p><h2>Today's habits</h2></div><button class="text-button" data-goto="habits">Monthly view →</button></div>
+            <div id="todayHabits" class="today-habits"></div>
+          </section>
+        </div>
+        <section class="panel reschedule-panel"><div class="panel-heading"><div><p class="eyebrow">NO GUILT, JUST A PLAN</p><h2>Needs a new plan</h2></div><span class="subtle" id="overdueCount"></span></div><div id="overdueTasks" class="task-list"></div></section>
+      </section>
+      <section id="view-tasks" class="view">
+        <div class="section-toolbar"><div><p class="eyebrow">YOUR TASKS, YOUR PACE</p><h2>Task list</h2></div><div class="toolbar-actions"><select id="taskFilter" aria-label="Filter tasks"><option value="all">All tasks</option><option value="today">Today</option><option value="upcoming">Upcoming</option><option value="overdue">Needs attention</option><option value="completed">Completed</option></select><button class="button button-primary" id="newTaskButton">＋ New task</button></div></div>
+        <div id="allTasks" class="task-list full-task-list"></div>
+      </section>
+      <section id="view-habits" class="view">
+        <div class="section-toolbar"><div><p class="eyebrow">CONSISTENCY OVER PERFECTION</p><h2>Habit tracker</h2><p class="subtle">See the whole month at a glance. Tap a day to update it or add a note.</p></div><button class="button button-primary" id="newHabitButton">＋ Add habit</button></div>
+        <div class="panel month-panel"><div class="month-controls"><button class="icon-button" id="prevMonth" aria-label="Previous month">‹</button><h3 id="monthTitle"></h3><button class="icon-button" id="nextMonth" aria-label="Next month">›</button><button class="text-button" id="thisMonth">This month</button></div><div id="habitGrid" class="habit-grid-wrap"></div><div class="legend"><span><i class="legend-dot done"></i> Completed</span><span><i class="legend-dot missed"></i> Missed</span><span><i class="legend-dot partial"></i> Partial</span><span><i class="legend-dot excused"></i> Excused</span><span><i class="legend-dot"></i> Not recorded</span></div></div>
+        <div id="habitSummary" class="habit-summary-grid"></div>
+        <div class="panel"><div class="panel-heading"><div><p class="eyebrow">YOUR ROUTINE</p><h2>Manage habits</h2></div></div><div id="manageHabits" class="manage-habits"></div></div>
+      </section>
+      <section id="view-calendar" class="view">
+        <div class="section-toolbar"><div><p class="eyebrow">PLAN WITH ROOM TO BREATHE</p><h2>Schedule</h2><p class="subtle">A chronological view of tasks for the selected day.</p></div><div class="toolbar-actions"><input id="calendarDate" type="date" aria-label="Choose date"><button class="button button-primary" id="calendarAdd">＋ Add task</button></div></div>
+        <div class="panel"><div id="daySchedule" class="schedule-list"></div></div>
+        <div class="panel tomorrow-panel"><div class="panel-heading"><div><p class="eyebrow">A HEAD START</p><h2>Plan tomorrow</h2><p class="subtle">Review tomorrow's tasks and add anything you don't want to forget.</p></div><button class="button button-secondary" id="planTomorrowButton">＋ Plan tomorrow</button></div><div id="tomorrowPreview" class="task-list"></div></div>
+      </section>
+      <section id="view-insights" class="view">
+        <div class="section-toolbar"><div><p class="eyebrow">NOTICE YOUR PATTERNS</p><h2>Weekly insights</h2><p class="subtle">A helpful reflection, not a score of your worth.</p></div><button class="button button-secondary" id="exportCsvButton">Export CSV</button></div>
+        <div id="insightStats" class="stats-grid"></div>
+        <div class="content-grid"><div class="panel"><div class="panel-heading"><div><p class="eyebrow">LAST 7 DAYS</p><h2>Task follow-through</h2></div></div><div id="weeklyChart" class="bar-chart"></div></div><div class="panel"><div class="panel-heading"><div><p class="eyebrow">PATTERNS, NOT JUDGMENT</p><h2>What got in the way?</h2></div></div><div id="reasonInsights" class="reason-list"></div></div></div>
+        <div class="panel"><div class="panel-heading"><div><p class="eyebrow">HABITS</p><h2>This month's consistency</h2></div></div><div id="monthlyHabitInsights" class="monthly-insights"></div></div>
+      </section>
+      <section id="view-focus" class="view">
+        <div class="focus-layout"><div class="panel focus-panel"><p class="eyebrow">ONE THING AT A TIME</p><h2 id="focusTaskTitle">Choose a task to focus on</h2><div class="focus-clock" id="focusClock">25:00</div><div class="focus-progress"><div id="focusProgressBar"></div></div><div class="focus-controls"><button class="button button-primary" id="focusStart">Start focus</button><button class="button button-secondary" id="focusReset">Reset</button></div><div class="focus-presets"><button data-minutes="15">15 min</button><button class="selected" data-minutes="25">25 min</button><button data-minutes="45">45 min</button><button data-minutes="60">60 min</button></div><p class="subtle">The timer runs while this page is open. Your browser may pause background timers.</p></div><div class="panel"><div class="panel-heading"><div><p class="eyebrow">PICK YOUR FOCUS</p><h2>Pending tasks</h2></div></div><div id="focusTaskList" class="task-list"></div></div></div>
+      </section>
+      <section id="view-settings" class="view">
+        <div class="section-toolbar"><div><p class="eyebrow">YOUR APP, YOUR RULES</p><h2>Settings & backup</h2><p class="subtle">Your data is stored in this browser. Export backups regularly.</p></div></div>
+        <div class="settings-grid"><div class="panel"><h3>Reminders</h3><p class="subtle">Allow browser notifications, then keep DayFlow open for in-app schedule checks. Background delivery is browser-dependent.</p><button class="button button-primary" id="settingsNotify">Enable notifications</button><div class="setting-row"><label for="reminderMinutes">Default reminder before a task</label><select id="reminderMinutes"><option value="0">At start time</option><option value="5">5 minutes</option><option value="10" selected>10 minutes</option><option value="15">15 minutes</option><option value="30">30 minutes</option></select></div><div class="setting-row"><label for="hourlyStart">Hourly habit reminders start</label><input type="time" id="hourlyStart" value="08:00"></div><div class="setting-row"><label for="hourlyEnd">Hourly habit reminders end</label><input type="time" id="hourlyEnd" value="20:00"></div></div>
+        <div class="panel"><h3>Data & privacy</h3><p class="subtle">No account or server is used in this GitHub Pages version. Data does not automatically sync between devices.</p><div class="backup-actions"><button class="button button-secondary" id="exportJsonButton">Download full backup (JSON)</button><button class="button button-secondary" id="importJsonButton">Restore backup</button><input type="file" id="importFile" accept="application/json" hidden><button class="button button-secondary" id="exportCsvSettings">Export tasks & habits (CSV)</button></div><div class="setting-row"><label for="weekStart">Week starts on</label><select id="weekStart"><option value="1">Monday</option><option value="0">Sunday</option></select></div><button class="button button-danger" id="clearDataButton">Delete all local data</button></div></div>
+      </section>
+      <footer class="footer">Made for real life, not perfect days. <span>DayFlow · Local-first edition</span></footer>
+    </main>
+  </div>
+  <div class="toast-region" id="toastRegion" aria-live="polite"></div>
+  <dialog id="taskDialog" class="modal"><form id="taskForm" method="dialog"><div class="modal-head"><div><p class="eyebrow">MAKE A LITTLE PLAN</p><h2 id="taskDialogTitle">Add a task</h2></div><button type="button" class="icon-button" data-close="taskDialog">×</button></div><input type="hidden" id="taskId"><label>Task name<input id="taskTitle" required maxlength="140" placeholder="e.g. Practise Python loops"></label><div class="form-row"><label>Date<input type="date" id="taskDate" required></label><label>Category<select id="taskCategory"><option>Personal</option><option>College</option><option>Learning</option><option>Health</option><option>Home</option><option>Work</option></select></label></div><div class="form-row"><label>Start time<input type="time" id="taskStart" value="17:00"></label><label>End time<input type="time" id="taskEnd" value="17:30"></label></div><div class="form-row"><label>Priority<select id="taskPriority"><option value="low">Low</option><option value="medium" selected>Medium</option><option value="high">High</option></select></label><label>Repeat<select id="taskRepeat"><option value="none">Does not repeat</option><option value="daily">Daily</option><option value="weekdays">Weekdays</option><option value="weekly">Weekly</option></select></label></div><div class="form-row"><label>Reminder<select id="taskReminder"><option value="none">No reminder</option><option value="0">At start time</option><option value="5">5 minutes before</option><option value="10" selected>10 minutes before</option><option value="15">15 minutes before</option><option value="30">30 minutes before</option></select></label><label>Scheduling<select id="taskFlex"><option value="flexible">Flexible</option><option value="fixed">Fixed time</option></select></label></div><label>Notes (optional)<textarea id="taskNotes" rows="2" placeholder="Anything you want to remember…"></textarea></label><div class="modal-actions"><button type="button" class="button button-secondary" data-close="taskDialog">Cancel</button><button type="submit" class="button button-primary">Save task</button></div></form></dialog>
+  <dialog id="habitDialog" class="modal"><form id="habitForm" method="dialog"><div class="modal-head"><div><p class="eyebrow">BUILD A ROUTINE</p><h2 id="habitDialogTitle">Add a habit</h2></div><button type="button" class="icon-button" data-close="habitDialog">×</button></div><input type="hidden" id="habitId"><label>Habit name<input id="habitName" required maxlength="100" placeholder="e.g. Read for 20 minutes"></label><div class="form-row"><label>Frequency<select id="habitFrequency"><option value="daily">Every day</option><option value="weekdays">Weekdays</option><option value="weekly">Selected weekdays</option></select></label><label>Target<input id="habitTarget" placeholder="e.g. 20 minutes or 8 glasses"></label></div><div id="weekdayPicker" class="weekday-picker"><label><input type="checkbox" value="1" checked> Mon</label><label><input type="checkbox" value="2" checked> Tue</label><label><input type="checkbox" value="3" checked> Wed</label><label><input type="checkbox" value="4" checked> Thu</label><label><input type="checkbox" value="5" checked> Fri</label><label><input type="checkbox" value="6"> Sat</label><label><input type="checkbox" value="0"> Sun</label></div><div class="reminder-toggle-row"><div><strong>Enable reminders</strong><small>Turn this habit's notifications on or off.</small></div><label class="switch" aria-label="Enable reminders for this habit"><input type="checkbox" id="habitRemindersEnabled" checked><span class="switch-slider"></span></label></div><div class="form-row"><label>First reminder / start time<input type="time" id="habitReminderTime" value="09:00"></label><label>Repeat reminder<select id="habitReminderInterval"><option value="none">Once at start time</option><option value="60">Every hour</option><option value="120">Every 2 hours</option></select></label></div><p class="subtle reminder-help">For hourly reminders, set the allowed reminder window in Settings → Reminders. Repeating reminders continue through the day even after you mark the habit done.</p><label>Start tracking from<input type="date" id="habitStartDate" required></label><div class="modal-actions"><button type="button" class="button button-secondary" data-close="habitDialog">Cancel</button><button type="submit" class="button button-primary">Save habit</button></div></form></dialog>
+  <dialog id="occurrenceDialog" class="modal"><form id="occurrenceForm" method="dialog"><div class="modal-head"><div><p class="eyebrow">A MOMENT TO REFLECT</p><h2 id="occurrenceTitle">Update habit</h2></div><button type="button" class="icon-button" data-close="occurrenceDialog">×</button></div><input type="hidden" id="occHabitId"><input type="hidden" id="occDate"><p class="subtle" id="occDateLabel"></p><label>Status<select id="occStatus"><option value="done">Completed</option><option value="partial">Partially completed</option><option value="missed">Missed</option><option value="excused">Excused</option><option value="clear">Clear this record</option></select></label><label>Reason or note (optional)<textarea id="occNote" rows="3" placeholder="What happened that day?"></textarea></label><div class="modal-actions"><button type="button" class="button button-secondary" data-close="occurrenceDialog">Cancel</button><button type="submit" class="button button-primary">Save record</button></div></form></dialog>
+  <dialog id="rescheduleDialog" class="modal"><form id="rescheduleForm" method="dialog"><div class="modal-head"><div><p class="eyebrow">RESET, DON'T GIVE UP</p><h2>Make a new plan</h2></div><button type="button" class="icon-button" data-close="rescheduleDialog">×</button></div><input type="hidden" id="rescheduleTaskId"><p id="rescheduleTaskName" class="subtle"></p><label>What got in the way?<select id="delayReason"><option>College or academic work</option><option>Unexpected work</option><option>Health or tiredness</option><option>Lack of time</option><option>Forgot about it</option><option>Distraction</option><option>Personal commitments</option><option>Other</option></select></label><label>More detail (optional)<textarea id="delayNote" rows="2" placeholder="Add context if helpful…"></textarea></label><div class="form-row"><label>New date<input id="newTaskDate" type="date" required></label><label>New start time<input id="newTaskStart" type="time" required></label></div><label>New end time<input id="newTaskEnd" type="time" required></label><div class="modal-actions"><button type="button" class="button button-secondary" data-close="rescheduleDialog">Cancel</button><button type="submit" class="button button-primary">Save new plan</button></div></form></dialog>
+  <dialog id="quickDialog" class="modal quick-modal"><form id="quickForm" method="dialog"><div class="modal-head"><div><p class="eyebrow">GET IT OUT OF YOUR HEAD</p><h2>Quick capture</h2></div><button type="button" class="icon-button" data-close="quickDialog">×</button></div><label>What do you need to do?<div class="voice-input"><input id="quickTitle" required maxlength="140" placeholder="Add a task in a few words"><button type="button" id="voiceButton" class="icon-button" title="Voice entry" aria-label="Voice entry">🎙</button></div></label><div class="form-row"><label>When?<select id="quickWhen"><option value="today">Today</option><option value="tomorrow">Tomorrow</option><option value="unscheduled">No date yet</option></select></label><label>Time (optional)<input id="quickTime" type="time"></label></div><p class="subtle" id="voiceStatus">Tip: you can add the details later.</p><div class="modal-actions"><button type="button" class="button button-secondary" data-close="quickDialog">Cancel</button><button type="submit" class="button button-primary">Capture task</button></div></form></dialog>
+  <script src="./app.js"></script>
+</body>
+</html>

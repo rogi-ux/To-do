@@ -1,0 +1,18 @@
+{
+  "name": "DayFlow \u2014 Personal Planner",
+  "short_name": "DayFlow",
+  "description": "A personal planner, habit tracker, and task history.",
+  "start_url": "./",
+  "scope": "./",
+  "display": "standalone",
+  "background_color": "#f7f7fb",
+  "theme_color": "#7566d9",
+  "icons": [
+    {
+      "src": "./icon.svg",
+      "sizes": "any",
+      "type": "image/svg+xml",
+      "purpose": "any maskable"
+    }
+  ]
+}
